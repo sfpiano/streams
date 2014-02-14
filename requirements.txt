@@ -1,0 +1,21 @@
+Flask==0.10.1
+Flask-Testing==0.4
+Flask-SQLAlchemy==1.0
+Flask-WTF==0.9.4
+Flask-Login==0.2.9
+Jinja2==2.7.2
+MarkupSafe==0.18
+SQLAlchemy==0.9.1
+Tempita==0.5.2
+WTForms==1.0.5
+Werkzeug==0.9.4
+backports.pbkdf2==0.1
+decorator==3.4.0
+itsdangerous==0.23
+pbr==0.6
+sqlalchemy-migrate==0.8.2
+wsgiref==0.1.2
+
+Edit /usr/lib/python2.7/site-packages/migrate/changeset/ansisql.py
+-from sqlalchemy.schema import SchemaVisitor
++from sqlalchemy.sql.base import SchemaVisitor

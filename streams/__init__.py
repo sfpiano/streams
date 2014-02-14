@@ -1,13 +1,18 @@
 from flask import Flask
 from flask.ext.sqlalchemy import SQLAlchemy
 from flask.ext.login import LoginManager
+import streams.errors as errors
+import streams.logs as logs
 
 app = Flask(__name__)
-app.config.from_object('streams.config')
+app.config.from_object('config.BaseConfiguration')
 db = SQLAlchemy(app)
 
-lm = LoginManager()
-lm.login_view = 'login'
-lm.init_app(app)
+login_manager = LoginManager()
+login_manager.login_view = 'login'
+login_manager.init_app(app)
 
-from streams import views, models
+logs.init_app(app, remove_existing_handlers=True)
+errors.init_app(app)
+
+import views
