@@ -2,7 +2,30 @@ from flask import url_for
 from flask.ext.login import current_user
 
 from streams.test_base import BaseTestCase
-from .models import User
+from .models import User, Project, Requirement, Issue
+
+class BasicModelsTests(BaseTestCase):
+  def test_relate_proj_rq(self):
+    test_proj = Project.create(name='proj1')
+    test_rq = Requirement.create(
+        description='This is a test rq',
+        project_id=test_proj.id)
+
+    self.assertEqual(test_proj.requirements.one(), test_rq)
+
+    test_issue = Issue.create(
+        title='Test title',
+        description='Test desc')
+
+    test_rq.issues.append(test_issue)
+    test_rq.save()
+
+    self.assertEqual(
+        Requirement.query.filter_by(id=test_rq.id).first().issues[0].id,
+        test_issue.id)
+    self.assertEqual(
+        Issue.query.filter_by(id=test_issue.id).first().requirements[0].id,
+        test_rq.id)
 
 class UserViewsTests(BaseTestCase):
   def test_user_can_login(self):
@@ -57,9 +80,9 @@ class UserViewsTests(BaseTestCase):
       self.assert_redirects(response, url_for("index"))
       self.assertFalse(current_user.is_anonymous())
 
-  def test_user_is_redirected_to_index_from_logout(self):
-    with self.client:
-      response = self.client.get(url_for("logout"))
+  #def test_user_is_redirected_to_index_from_logout(self):
+  #  with self.client:
+  #    response = self.client.get(url_for("logout"))
 
-      self.assert_redirects(response, url_for("login"))
-      self.assertTrue(current_user.is_anonymous())
+  #    self.assert_redirects(response, url_for("login"))
+  #    self.assertTrue(current_user.is_anonymous())

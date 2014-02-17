@@ -9,7 +9,7 @@ from flask.ext.login import UserMixin
 from sqlalchemy.ext.hybrid import hybrid_property
 
 class User(UserMixin, CRUDMixin, db.Model):
-  id = db.Column(db.Integer, primary_key = True)
+  __tablename__ = 'streams_user'
   name = db.Column(db.String(64), unique = True)
   _password = db.Column(db.LargeBinary(120))
   _salt = db.Column(db.String(120))
@@ -38,32 +38,44 @@ class User(UserMixin, CRUDMixin, db.Model):
   def __repr__(self):
     return '<User %r>' % (self.name)
 
-class Project(db.Model):
-  id = db.Column(db.Integer, primary_key=True)
+class Project(CRUDMixin, db.Model):
+  __tablename__ = 'streams_project'
   name = db.Column(db.String(80))
   requirements = db.relationship('Requirement', backref='project', lazy='dynamic')
-
-  def __init__(self, name):
-    self.name = name
 
   def __repr__(self):
     return '<Project %r>' % self.name
 
-class Requirement(db.Model):
-  id = db.Column(db.Integer, primary_key=True)
+rq_issue_helper = db.Table('rq_issue_helper',
+    db.Column('rq_id', db.Integer, db.ForeignKey('streams_rq.id')),
+    db.Column('issue_id', db.Integer, db.ForeignKey('streams_issue.id'))
+    )
+
+class Requirement(CRUDMixin, db.Model):
+  __tablename__ = 'streams_rq'
   description = db.Column(db.Text)
-  project_id = db.Column(db.Integer, db.ForeignKey('project.id'))
+  project_id = db.Column(db.Integer, db.ForeignKey('streams_project.id'))
+  issues = db.relationship(
+      'Issue',
+      secondary=rq_issue_helper,
+      backref=db.backref('rqs_query', lazy='dynamic'))
 
-  def __init__(self, desc):
-    self.description = desc
+  def __repr__(self):
+    return '<RQ %r>' % (self.description)
 
-class Issue(db.Model):
+class Issue(CRUDMixin, db.Model):
+  __tablename__ = 'streams_issue'
   id = db.Column(db.Integer, primary_key=True)
   title = db.Column(db.Text)
   description = db.Column(db.Text)
 
-  def __init__(self, title):
-    self.title = title
+  requirements = db.relationship(
+      'Requirement',
+      secondary=rq_issue_helper,
+      backref=db.backref('issues_query', lazy='dynamic'))
+
+  def __repr__(self):
+    return '<Issue %r>' % (self.title)
 
 class Test(db.Model):
   id = db.Column(db.Integer, primary_key=True)
