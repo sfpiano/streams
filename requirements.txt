@@ -15,7 +15,3 @@ itsdangerous==0.23
 pbr==0.6
 sqlalchemy-migrate==0.8.2
 wsgiref==0.1.2
-
-Edit /usr/lib/python2.7/site-packages/migrate/changeset/ansisql.py
--from sqlalchemy.schema import SchemaVisitor
-+from sqlalchemy.sql.base import SchemaVisitor

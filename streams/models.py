@@ -8,6 +8,10 @@ from flask import current_app
 from flask.ext.login import UserMixin
 from sqlalchemy.ext.hybrid import hybrid_property
 
+from collections import namedtuple
+def create_named_tuple(*values):
+  return namedtuple('NamedTuple', values)(*values)
+
 class User(UserMixin, CRUDMixin, db.Model):
   __tablename__ = 'streams_user'
   name = db.Column(db.String(64), unique = True)
@@ -36,7 +40,7 @@ class User(UserMixin, CRUDMixin, db.Model):
     return bytes(buff)
 
   def __repr__(self):
-    return '<User %r>' % (self.name)
+    return '<User {0}>'.format(self.name)
 
 class Project(CRUDMixin, db.Model):
   __tablename__ = 'streams_project'
@@ -44,7 +48,7 @@ class Project(CRUDMixin, db.Model):
   requirements = db.relationship('Requirement', backref='project', lazy='dynamic')
 
   def __repr__(self):
-    return '<Project %r>' % self.name
+    return '<Project {0}>'.format(self.name)
 
 rq_issue_helper = db.Table('rq_issue_helper',
     db.Column('rq_id', db.Integer, db.ForeignKey('streams_rq.id')),
@@ -61,13 +65,17 @@ class Requirement(CRUDMixin, db.Model):
       backref=db.backref('rqs_query', lazy='dynamic'))
 
   def __repr__(self):
-    return '<RQ %r>' % (self.description)
+    return '<RQ {0}>'.format(self.description)
 
 class Issue(CRUDMixin, db.Model):
   __tablename__ = 'streams_issue'
+
+  project_version = create_named_tuple('f', 'alpha', 'beta', 'prod')
+
   id = db.Column(db.Integer, primary_key=True)
   title = db.Column(db.Text)
   description = db.Column(db.Text)
+  type = db.Column(db.Enum(*project_version._asdict().values(), name='issue_type'))
 
   requirements = db.relationship(
       'Requirement',
@@ -75,11 +83,15 @@ class Issue(CRUDMixin, db.Model):
       backref=db.backref('issues_query', lazy='dynamic'))
 
   def __repr__(self):
-    return '<Issue %r>' % (self.title)
+    return '<Issue {0}>'.format(self.title)
 
-class Test(db.Model):
+class Test(CRUDMixin, db.Model):
+  __tablename__ = 'streams_test'
   id = db.Column(db.Integer, primary_key=True)
   description = db.Column(db.Text)
 
   def __init__(self, desc):
     self.description = desc
+
+  def __repr__(self):
+    return '<Test {0}>'.format(self.description[0:25])
