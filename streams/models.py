@@ -70,12 +70,13 @@ class Requirement(CRUDMixin, db.Model):
 class Issue(CRUDMixin, db.Model):
   __tablename__ = 'streams_issue'
 
-  project_version = create_named_tuple('f', 'alpha', 'beta', 'prod')
+  types = create_named_tuple('bug', 'en')
 
-  id = db.Column(db.Integer, primary_key=True)
+  release_id = db.Column(db.Integer, db.ForeignKey('streams_release.id'))
+
   title = db.Column(db.Text)
   description = db.Column(db.Text)
-  type = db.Column(db.Enum(*project_version._asdict().values(), name='issue_type'))
+  type = db.Column(db.Enum(*types._asdict().values(), name='issue_type'))
 
   requirements = db.relationship(
       'Requirement',
@@ -87,11 +88,15 @@ class Issue(CRUDMixin, db.Model):
 
 class Test(CRUDMixin, db.Model):
   __tablename__ = 'streams_test'
-  id = db.Column(db.Integer, primary_key=True)
   description = db.Column(db.Text)
-
-  def __init__(self, desc):
-    self.description = desc
 
   def __repr__(self):
     return '<Test {0}>'.format(self.description[0:25])
+
+class Release(CRUDMixin, db.Model):
+  __tablename__ = 'streams_release'
+  name = db.Column(db.Text)
+  date = db.Column(db.Date)
+
+  def __repr__(self):
+    return '<Release {0}>'.format(self.name)

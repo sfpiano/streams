@@ -2,8 +2,9 @@ from flask.ext.wtf import Form
 from sqlalchemy.orm.exc import MultipleResultsFound, NoResultFound
 from wtforms import fields, TextField, BooleanField
 from wtforms.validators import Required, ValidationError, InputRequired
+from wtforms.ext.sqlalchemy.fields import QuerySelectField
 
-from .models import User
+from .models import User, Project
 
 class LoginForm(Form):
   name = TextField('name', validators = [Required()])
@@ -33,3 +34,10 @@ class RegistrationForm(Form):
     print user
     if user is not None:
       raise ValidationError("Username already exists")
+
+def test():
+  return Project.query
+
+class RequirementForm(Form):
+  description = fields.StringField(validators=[Required()])
+  project_id = QuerySelectField(query_factory=test)

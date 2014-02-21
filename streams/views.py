@@ -1,5 +1,5 @@
 from streams import app, login_manager, db
-from .forms import LoginForm, RegistrationForm
+from .forms import LoginForm, RegistrationForm, RequirementForm
 from flask import (render_template,
                    flash,
                    request,
@@ -13,7 +13,8 @@ from flask.ext.login import (login_user,
                              current_user,
                              login_required)
 
-from .models import User
+from .models import User, Requirement, Project, Issue
+from data import query_to_list
 
 @app.before_request
 def before_request():
@@ -24,6 +25,45 @@ def before_request():
 @login_required
 def index():
   return render_template('base.html')
+
+@app.route('/test')
+def test():
+  test_proj = Project.create(name='proj1')
+  test_rq = Requirement.create(
+      description='This is a test rq',
+      project_id=test_proj.id)
+
+  test_issue = Issue.create(
+      title='Test title',
+      description='Test desc',
+      type=Issue.types.bug)
+
+  test_rq.issues.append(test_issue)
+  test_rq.save()
+
+  return render_template('base.html')
+
+@app.route('/issues')
+@login_required
+def issues():
+  data = Issue.query
+  results = query_to_list(data)
+  return render_template('issues.html', issues=results)
+
+@app.route('/reqs', methods = ['GET', 'POST'])
+@login_required
+def reqs():
+  form = RequirementForm()
+  if form.validate_on_submit():
+    Requirement.create(
+        description=form.data['description'],
+        project_id=form.data['project_id'].id)
+    flash("Added Requirement")
+    return redirect(url_for(".reqs"))
+    
+  data = Requirement.query
+  results = query_to_list(data)
+  return render_template('reqs.html', reqs=results, form=form)
 
 @login_manager.user_loader
 def load_user(user_id):

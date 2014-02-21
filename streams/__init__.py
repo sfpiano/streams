@@ -1,8 +1,7 @@
 from flask import Flask
 from flask.ext.sqlalchemy import SQLAlchemy
 from flask.ext.login import LoginManager
-import streams.errors as errors
-import streams.logs as logs
+import logs, errors
 
 app = Flask(__name__)
 app.config.from_object('config.BaseConfiguration')

@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% import "util/tables.html" as tables %}
+{% block title %}Issues{% endblock %}
+{% block content %}
+<table>
+{{ tables.render(issues) }}
+</table>
+{% endblock content %}
+
