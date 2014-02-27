@@ -48,7 +48,7 @@ class Project(CRUDMixin, db.Model):
   requirements = db.relationship('Requirement', backref='project', lazy='dynamic')
 
   def __repr__(self):
-    return '<Project {0}>'.format(self.name)
+    return '<Project {0} {1}>'.format(self.id, self.name)
 
 rq_issue_helper = db.Table('rq_issue_helper',
     db.Column('rq_id', db.Integer, db.ForeignKey('streams_rq.id')),
@@ -65,18 +65,18 @@ class Requirement(CRUDMixin, db.Model):
       backref=db.backref('rqs_query', lazy='dynamic'))
 
   def __repr__(self):
-    return '<RQ {0}>'.format(self.description)
+    return '<RQ {0} {1}>'.format(self.id, self.description)
 
 class Issue(CRUDMixin, db.Model):
   __tablename__ = 'streams_issue'
 
-  types = create_named_tuple('bug', 'en')
+  Types = create_named_tuple('bug', 'en')
 
   release_id = db.Column(db.Integer, db.ForeignKey('streams_release.id'))
 
   title = db.Column(db.Text)
   description = db.Column(db.Text)
-  type = db.Column(db.Enum(*types._asdict().values(), name='issue_type'))
+  type = db.Column(db.Enum(*Types._asdict().values(), name='issue_type'))
 
   requirements = db.relationship(
       'Requirement',
@@ -84,14 +84,14 @@ class Issue(CRUDMixin, db.Model):
       backref=db.backref('issues_query', lazy='dynamic'))
 
   def __repr__(self):
-    return '<Issue {0}>'.format(self.title)
+    return '<Issue {0} {1}>'.format(self.id, self.title)
 
 class Test(CRUDMixin, db.Model):
   __tablename__ = 'streams_test'
   description = db.Column(db.Text)
 
   def __repr__(self):
-    return '<Test {0}>'.format(self.description[0:25])
+    return '<Test {0} {1}>'.format(self.id, self.description[0:25])
 
 class Release(CRUDMixin, db.Model):
   __tablename__ = 'streams_release'
@@ -99,4 +99,4 @@ class Release(CRUDMixin, db.Model):
   date = db.Column(db.Date)
 
   def __repr__(self):
-    return '<Release {0}>'.format(self.name)
+    return '<Release {0} {1}>'.format(self.id, self.name)

@@ -1,20 +1,21 @@
 {% extends "base.html" %}
 {% import "util/tables.html" as tables %}
 {% import "util/forms.html" as forms %}
-{% block title %}Issues{% endblock %}
+{% block title %}Tests{% endblock %}
 {% block content %}
 {{super()}}
 
-<form action="{{url_for('issues')}}" method="POST">
+<form action="{{url_for('tests')}}" method="POST">
 <fieldset>
-<legend>Add An Issue</legend>
+<legend>Add A Test</legend>
 {{ forms.render(form) }}
-<p><input type="Submit" value="Add Issue"></p>
+<p><input type="Submit" value="Add Test"></p>
 </fieldset>
 </form>
 
 <table>
-{{ tables.render(issues) }}
+{{ tables.render(tests) }}
 </table>
 {% endblock content %}
+
 

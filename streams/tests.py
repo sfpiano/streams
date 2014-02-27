@@ -16,11 +16,11 @@ class BasicModelsTests(BaseTestCase):
     test_issue = Issue.create(
         title='Test title',
         description='Test desc')
-    test_issue.type = Issue.types.bug
+    test_issue.type = Issue.Types.bug
     test_issue.save()
 
     self.assertEqual(Issue.query.filter_by(id=test_issue.id).first().type,
-      Issue.types.bug)
+      Issue.Types.bug)
 
     test_rq.issues.append(test_issue)
     test_rq.save()

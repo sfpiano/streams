@@ -9,8 +9,10 @@
 <nav>
 <ul>
 <li><a href="/">Home</a></li>
+<li><a href="/releases">Releases</a></li>
 <li><a href="/reqs">Requirements</a></li>
 <li><a href="/issues">Issues</a></li>
+<li><a href="/tests">Tests</a></li>
 <li>
   {% if current_user.is_anonymous() %}
   <a href="{{url_for('register')}}">Register</a> / <a href="{{url_for('login')}}">Log In</a>

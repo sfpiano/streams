@@ -1,5 +1,5 @@
 from streams import app, login_manager, db
-from .forms import LoginForm, RegistrationForm, RequirementForm
+from .forms import LoginForm, RegistrationForm, RequirementForm, IssueForm, ReleaseForm, TestForm
 from flask import (render_template,
                    flash,
                    request,
@@ -13,12 +13,16 @@ from flask.ext.login import (login_user,
                              current_user,
                              login_required)
 
-from .models import User, Requirement, Project, Issue
+from .models import User, Requirement, Project, Issue, Release, Test
 from data import query_to_list
 
 @app.before_request
 def before_request():
   g.user = current_user
+
+@app.route('/favicon.ico')
+def fav():
+  return render_template('base.html')
 
 @app.route('/')
 @app.route('/index')
@@ -36,19 +40,48 @@ def test():
   test_issue = Issue.create(
       title='Test title',
       description='Test desc',
-      type=Issue.types.bug)
+      type=Issue.Types.bug)
 
   test_rq.issues.append(test_issue)
   test_rq.save()
 
   return render_template('base.html')
 
-@app.route('/issues')
+@app.route('/issues', methods = ['GET', 'POST'])
 @login_required
 def issues():
+  form = IssueForm()
+  if form.validate_on_submit():
+    issue = Issue.create(
+        title=form.data['title'],
+        description=form.data['description'],
+        type=form.data['type'])
+    #form.data['req'].issues.append(issue)
+    #form.data['req'].save()
+    issue.requirements.append(form.data['req'])
+    issue.save()
+    flash("Added Issue")
+    return redirect(url_for(".issues"))
+
   data = Issue.query
   results = query_to_list(data)
-  return render_template('issues.html', issues=results)
+  return render_template('issues.html', issues=results, form=form)
+
+@app.route('/releases', methods = ['GET', 'POST'])
+@login_required
+def releases():
+  form = ReleaseForm()
+  if form.validate_on_submit():
+    print form.data['date']
+    Release.create(
+      name=form.data['name'],
+      date=form.data['date'])
+    flash("Added Release")
+    return redirect(url_for(".releases"))
+
+  data = Release.query
+  results = query_to_list(data)
+  return render_template('releases.html', releases=results, form=form)
 
 @app.route('/reqs', methods = ['GET', 'POST'])
 @login_required

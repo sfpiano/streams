@@ -4,6 +4,7 @@
 {% block title %}Requirements{% endblock %}
 {% block content %}
 {{super()}}
+
 <form action="{{url_for('reqs')}}" method="POST">
 <fieldset>
 <legend>Add A Requirement</legend>
@@ -11,6 +12,7 @@
 <p><input type="Submit" value="Add Requirement"></p>
 </fieldset>
 </form>
+
 <table>
 {{ tables.render(reqs) }}
 </table>
