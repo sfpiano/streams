@@ -1,19 +1,33 @@
 from streams import app, login_manager, db
-from .forms import LoginForm, RegistrationForm, RequirementForm, IssueForm, ReleaseForm, TestForm
-from flask import (render_template,
-                   flash,
-                   request,
-                   redirect,
-                   session,
-                   url_for,
-                   current_app,
-                   g)
-from flask.ext.login import (login_user,
-                             logout_user,
-                             current_user,
-                             login_required)
+from .forms import (
+    LoginForm,
+    RegistrationForm,
+    RequirementForm,
+    IssueForm,
+    ReleaseForm,
+    TestForm)
+from flask import (
+    render_template,
+    flash,
+    request,
+    redirect,
+    session,
+    url_for,
+    current_app,
+    g)
+from flask.ext.login import (
+    login_user,
+    logout_user,
+    current_user,
+    login_required)
 
-from .models import User, Requirement, Project, Issue, Release, Test
+from .models import (
+    User,
+    Requirement,
+    Project,
+    Issue,
+    Release,
+    Test)
 from data import query_to_list
 
 @app.before_request
@@ -56,8 +70,7 @@ def issues():
         title=form.data['title'],
         description=form.data['description'],
         type=form.data['type'])
-    #form.data['req'].issues.append(issue)
-    #form.data['req'].save()
+
     issue.requirements.append(form.data['req'])
     issue.save()
     flash("Added Issue")
