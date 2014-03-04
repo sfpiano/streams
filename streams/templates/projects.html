@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% import "util/tables.html" as tables %}
+{% import "util/forms.html" as forms %}
+{% block title %}Projects{% endblock %}
+{% block content %}
+{{super()}}
+
+<form action="{{url_for('projects')}}" method="POST">
+<fieldset>
+<legend>Add A Project</legend>
+{{ forms.render(form) }}
+<p><input type="Submit" value="Add Project"></p>
+</fieldset>
+</form>
+
+<table>
+<tbody>
+{% call(proj) tables.process_rows(projects) %}
+<td>{{ proj.name }}</td>
+<td><a href='{{url_for('set_project', id=proj.id)}}'>Make current</a></td>
+{% endcall %}
+</tbody>
+</table>
+
+{% endblock content %}
+
+

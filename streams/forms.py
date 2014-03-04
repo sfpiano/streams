@@ -57,5 +57,8 @@ class ReleaseForm(Form):
   name = fields.StringField(validators=[Required()])
   date = fields.DateField('Date: m/d/yy', validators=[Required()], format='%m/%d/%y')
 
+class ProjectForm(Form):
+  name = fields.StringField(validators=[Required()])
+
 class TestForm(Form):
   pass

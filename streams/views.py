@@ -4,6 +4,7 @@ from .forms import (
     RegistrationForm,
     RequirementForm,
     IssueForm,
+    ProjectForm,
     ReleaseForm,
     TestForm)
 from flask import (
@@ -44,22 +45,20 @@ def fav():
 def index():
   return render_template('base.html')
 
-@app.route('/test')
-def test():
-  test_proj = Project.create(name='proj1')
-  test_rq = Requirement.create(
-      description='This is a test rq',
-      project_id=test_proj.id)
+@app.route('/projects', methods = ['GET', 'POST'])
+@login_required
+def projects():
+  form = ProjectForm()
+  if form.validate_on_submit():
+    project = Project.create(**form.data)
 
-  test_issue = Issue.create(
-      title='Test title',
-      description='Test desc',
-      type=Issue.Types.bug)
+    flash("Added Project")
+    return redirect(url_for(".projects"))
 
-  test_rq.issues.append(test_issue)
-  test_rq.save()
-
-  return render_template('base.html')
+  data = Project.query
+  results = query_to_list(data)
+  results = data.all()
+  return render_template('projects.html', projects=results, form=form)
 
 @app.route('/issues', methods = ['GET', 'POST'])
 @login_required
@@ -85,7 +84,6 @@ def issues():
 def releases():
   form = ReleaseForm()
   if form.validate_on_submit():
-    print form.data['date']
     Release.create(
       name=form.data['name'],
       date=form.data['date'])
@@ -140,4 +138,11 @@ def register():
 @login_required
 def logout():
   logout_user()
+  return redirect(url_for('index'))
+
+@app.route('/setproj/<int:id>')
+@login_required
+def set_project(id):
+  current_user.current_project_id = id
+  current_user.save()
   return redirect(url_for('index'))

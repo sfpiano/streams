@@ -15,6 +15,8 @@ def create_named_tuple(*values):
 class User(UserMixin, CRUDMixin, db.Model):
   __tablename__ = 'streams_user'
   name = db.Column(db.String(64), unique = True)
+  current_project_id = db.Column(db.Integer, db.ForeignKey('streams_project.id'))
+
   _password = db.Column(db.LargeBinary(120))
   _salt = db.Column(db.String(120))
 

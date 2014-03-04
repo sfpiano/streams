@@ -27,3 +27,11 @@
   </tr>
 </thead>
 {% endmacro %}
+
+{% macro process_rows(data) -%}
+  <tr>
+  {%- for row in data %}
+    {{ caller(row) }}
+  {%- endfor %}
+  </tr>
+{%- endmacro %}
