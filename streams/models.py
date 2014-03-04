@@ -20,6 +20,13 @@ class User(UserMixin, CRUDMixin, db.Model):
   _password = db.Column(db.LargeBinary(120))
   _salt = db.Column(db.String(120))
 
+  @property
+  def current_project(self):
+    try:
+      return Project.query.get(self.current_project_id)
+    except Exception:
+      return None
+
   @hybrid_property
   def password(self):
     return self._password

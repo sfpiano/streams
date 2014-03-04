@@ -49,13 +49,19 @@ class RequirementForm(Form):
 class IssueForm(Form):
   title = fields.StringField(validators=[Required()])
   description = fields.TextAreaField(validators=[Optional()])
-  type = fields.SelectField('Type', choices=Issue.Types._asdict().items(), validators=[Required()])
+  type = fields.SelectField(
+    'Type',
+    choices=Issue.Types._asdict().items(),
+    validators=[Required()])
   release = QuerySelectField(query_factory=release_query)
   req = QuerySelectField(query_factory=req_query)
 
 class ReleaseForm(Form):
   name = fields.StringField(validators=[Required()])
-  date = fields.DateField('Date: m/d/yy', validators=[Required()], format='%m/%d/%y')
+  date = fields.DateField(
+    'Date: m/d/yy',
+    validators=[Required()],
+    format='%m/%d/%y')
 
 class ProjectForm(Form):
   name = fields.StringField(validators=[Required()])

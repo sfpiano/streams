@@ -8,7 +8,7 @@
 <form action="{{url_for('issues')}}" method="POST">
 <fieldset>
 <legend>Add An Issue</legend>
-{{ forms.render(form) }}
+{{ forms.render(form, rows=10, cols=100) }}
 <p><input type="Submit" value="Add Issue"></p>
 </fieldset>
 </form>
