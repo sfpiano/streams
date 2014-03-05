@@ -7,14 +7,38 @@
 
 <form action="{{url_for('issues')}}" method="POST">
 <fieldset>
-<legend>Add An Issue</legend>
-{{ forms.render(form, rows=10, cols=100) }}
-<p><input type="Submit" value="Add Issue"></p>
+  <legend>Add An Issue</legend>
+  <dl>
+  {{ forms.render_field(form.title, size=50) }}
+  {{ forms.render_field(form.description, rows=10, cols=50) }}
+  {{ forms.render_field(form.type) }}
+  {{ forms.render_field(form.release) }}
+  {{ forms.render_field(form.req) }}
+  </dl>
+  {{ form.hidden_tag() }}
+  <p><input type="Submit" value="Add Issue"></p>
 </fieldset>
 </form>
 
 <table>
-{{ tables.render(issues) }}
+<thead>
+  <tr>
+    <th>ID</th>
+    <th>Release</th>
+    <th>Type</th>
+    <th>Title</th>
+    <th>Description</th>
+  </tr>
+</thead>
+<tbody>
+{% call(issue) tables.process_rows(issues) %}
+<td>{{ issue.id }}</td>
+<td>{{ issue.release.name }}</td>
+<td>{{ issue.type }}</td>
+<td>{{ issue.title }}</td>
+<td>{{ issue.description }}</td>
+{% endcall %}
+</tbody>
 </table>
 {% endblock content %}
 

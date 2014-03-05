@@ -7,15 +7,31 @@
 
 <form action="{{url_for('tests')}}" method="POST">
 <fieldset>
-<legend>Add A Test</legend>
-{{ forms.render(form) }}
-<p><input type="Submit" value="Add Test"></p>
+  <legend>Add A Test</legend>
+  <dl>
+  {{ forms.render_field(form.issue) }}
+  {{ forms.render_field(form.description, rows=10, cols=50) }}
+  </dl>
+  {{ form.hidden_tag() }}
+  <p><input type="Submit" value="Add Test"></p>
 </fieldset>
 </form>
 
 <table>
-{{ tables.render(tests) }}
+<thead>
+  <tr>
+    <th>ID</th>
+    <th>Issue</th>
+    <th>Description</th>
+  </tr>
+</thead>
+<tbody>
+{% call(test) tables.process_rows(tests) %}
+<td>{{ test.id }}</td>
+<td>{{ test.issue_id }}</td>
+<td>{{ test.description }}</td>
+{% endcall %}
+</tbody>
 </table>
 {% endblock content %}
-
 

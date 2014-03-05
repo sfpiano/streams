@@ -64,17 +64,43 @@ rq_issue_helper = db.Table('rq_issue_helper',
     db.Column('issue_id', db.Integer, db.ForeignKey('streams_issue.id'))
     )
 
+class RQCategory(CRUDMixin, db.Model):
+  __tablename__ = 'streams_rq_cat'
+
+  name = db.Column(db.String(32))
+
+  def __repr__(self):
+    return '<Cat {0} {1}>'.format(self.id, self.name)
+
 class Requirement(CRUDMixin, db.Model):
   __tablename__ = 'streams_rq'
+
   description = db.Column(db.Text)
+  category_id = db.Column(db.Integer, db.ForeignKey('streams_rq_cat.id'))
   project_id = db.Column(db.Integer, db.ForeignKey('streams_project.id'))
+  external_id = db.Column(db.Integer)
+
   issues = db.relationship(
       'Issue',
       secondary=rq_issue_helper,
       backref=db.backref('rqs_query', lazy='dynamic'))
 
+  @property
+  def category(self):
+    try:
+      return RQCategory.query.get(self.category_id)
+    except Exception:
+      return None
+
   def __repr__(self):
-    return '<RQ {0} {1}>'.format(self.id, self.description)
+    try:
+      return '{0} {1} {2}{3}'.format(
+          self.category.name,
+          self.external_id,
+          self.description[:50],
+          '...' if len(self.description) > 50 else "")
+    except Exception:
+      return '<RQ {0} {1}>'.format(self.id, self.description)
 
 class Issue(CRUDMixin, db.Model):
   __tablename__ = 'streams_issue'
@@ -92,18 +118,28 @@ class Issue(CRUDMixin, db.Model):
       secondary=rq_issue_helper,
       backref=db.backref('issues_query', lazy='dynamic'))
 
+  @property
+  def release(self):
+    try:
+      return Release.query.get(self.release_id)
+    except Exception:
+      pass
+
   def __repr__(self):
     return '<Issue {0} {1}>'.format(self.id, self.title)
 
 class Test(CRUDMixin, db.Model):
   __tablename__ = 'streams_test'
+
   description = db.Column(db.Text)
+  issue_id = db.Column(db.Integer, db.ForeignKey('streams_issue.id'))
 
   def __repr__(self):
     return '<Test {0} {1}>'.format(self.id, self.description[0:25])
 
 class Release(CRUDMixin, db.Model):
   __tablename__ = 'streams_release'
+
   name = db.Column(db.Text)
   date = db.Column(db.Date)
 

@@ -1,12 +1,4 @@
 from streams import app, login_manager, db
-from .forms import (
-    LoginForm,
-    RegistrationForm,
-    RequirementForm,
-    IssueForm,
-    ProjectForm,
-    ReleaseForm,
-    TestForm)
 from flask import (
     render_template,
     flash,
@@ -22,6 +14,14 @@ from flask.ext.login import (
     current_user,
     login_required)
 
+from .forms import (
+    LoginForm,
+    RegistrationForm,
+    RequirementForm,
+    IssueForm,
+    ProjectForm,
+    ReleaseForm,
+    TestForm)
 from .models import (
     User,
     Requirement,
@@ -29,7 +29,7 @@ from .models import (
     Issue,
     Release,
     Test)
-from data import query_to_list
+from .data import query_to_list
 
 @app.before_request
 def before_request():
@@ -55,9 +55,7 @@ def projects():
     flash("Added Project")
     return redirect(url_for(".projects"))
 
-  data = Project.query
-  results = query_to_list(data)
-  results = data.all()
+  results = Project.query.all()
   return render_template('projects.html', projects=results, form=form)
 
 @app.route('/issues', methods = ['GET', 'POST'])
@@ -68,6 +66,7 @@ def issues():
     issue = Issue.create(
         title=form.data['title'],
         description=form.data['description'],
+        release_id=form.data['release'].id,
         type=form.data['type'])
 
     issue.requirements.append(form.data['req'])
@@ -75,8 +74,7 @@ def issues():
     flash("Added Issue")
     return redirect(url_for(".issues"))
 
-  data = Issue.query
-  results = query_to_list(data)
+  results = Issue.query.all()
   return render_template('issues.html', issues=results, form=form)
 
 @app.route('/releases', methods = ['GET', 'POST'])
@@ -101,13 +99,28 @@ def reqs():
   if form.validate_on_submit():
     Requirement.create(
         description=form.data['description'],
-        project_id=form.data['project_id'].id)
+        project_id=current_user.current_project_id,
+        category_id=form.data['category'].id,
+        external_id=form.data['external_id'])
     flash("Added Requirement")
     return redirect(url_for(".reqs"))
     
-  data = Requirement.query
-  results = query_to_list(data)
+  results = Requirement.query.all()
   return render_template('reqs.html', reqs=results, form=form)
+
+@app.route('/tests', methods = ['GET', 'POST'])
+@login_required
+def tests():
+  form = TestForm()
+  if form.validate_on_submit():
+    Test.create(
+        description=form.data['description'],
+        issue_id=form.data['issue'].id)
+    flash("Added Test")
+    return redirect(url_for(".tests"))
+    
+  results = Test.query.all()
+  return render_template('tests.html', tests=results, form=form)
 
 @login_manager.user_loader
 def load_user(user_id):

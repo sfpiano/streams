@@ -1,15 +1,18 @@
 from flask.ext.wtf import Form
 from sqlalchemy.orm.exc import MultipleResultsFound, NoResultFound
-from wtforms import fields, TextField, BooleanField
-from wtforms.validators import Required, ValidationError, InputRequired, Optional
+from wtforms import fields 
+from wtforms.validators import (
+    Required,
+    ValidationError,
+    InputRequired,
+    Optional)
 from wtforms.ext.sqlalchemy.fields import QuerySelectField
 
-from .models import User, Project, Issue, Requirement, Release
+from .models import User, Project, Issue, Requirement, Release, RQCategory
 
 class LoginForm(Form):
-  name = TextField('name', validators = [Required()])
+  name = fields.TextField('name', validators = [Required()])
   password = fields.PasswordField('password', validators = [Required()])
-  remember_me = BooleanField('remember_me', default = False)
 
   def validate_password(form, field):
     try:
@@ -25,7 +28,7 @@ class LoginForm(Form):
     form.user = user
 
 class RegistrationForm(Form):
-  name = fields.StringField("Display Name")
+  name = fields.TextField("Display Name")
   password = fields.PasswordField(validators=[InputRequired()])
 
   def validate_name(form, field):
@@ -41,13 +44,18 @@ def req_query():
   return Requirement.query
 def release_query():
   return Release.query
+def issue_query():
+  return Issue.query
+def rq_cat_query():
+  return RQCategory.query
 
 class RequirementForm(Form):
-  description = fields.StringField(validators=[Required()])
-  project_id = QuerySelectField(query_factory=project_query)
+  description = fields.TextAreaField(validators=[Required()])
+  category = QuerySelectField(query_factory=rq_cat_query)
+  external_id = fields.IntegerField(validators=[Optional()])
 
 class IssueForm(Form):
-  title = fields.StringField(validators=[Required()])
+  title = fields.TextField(validators=[Required()])
   description = fields.TextAreaField(validators=[Optional()])
   type = fields.SelectField(
     'Type',
@@ -57,14 +65,15 @@ class IssueForm(Form):
   req = QuerySelectField(query_factory=req_query)
 
 class ReleaseForm(Form):
-  name = fields.StringField(validators=[Required()])
+  name = fields.TextField(validators=[Required()])
   date = fields.DateField(
     'Date: m/d/yy',
     validators=[Required()],
     format='%m/%d/%y')
 
 class ProjectForm(Form):
-  name = fields.StringField(validators=[Required()])
+  name = fields.TextField(validators=[Required()])
 
 class TestForm(Form):
-  pass
+  issue = QuerySelectField(query_factory=issue_query)
+  description = fields.TextAreaField(validators=[Required()])

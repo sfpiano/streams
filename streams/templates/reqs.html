@@ -8,12 +8,23 @@
 <form action="{{url_for('reqs')}}" method="POST">
 <fieldset>
 <legend>Add A Requirement</legend>
-{{ forms.render(form) }}
+  <dl>
+  {{ forms.render_field(form.description, rows=4, cols=50) }}
+  {{ forms.render_field(form.category) }}
+  {{ forms.render_field(form.external_id) }}
+  </dl>
+  {{ form.hidden_tag() }}
 <p><input type="Submit" value="Add Requirement"></p>
 </fieldset>
 </form>
 
 <table>
-{{ tables.render(reqs) }}
+<tbody>
+{% call(req) tables.process_rows(reqs) %}
+<td>{{ req.category.name }}</td>
+<td>{{ req.external_id }}</td>
+<td>{{ req.description }}</td>
+{% endcall %}
+</tbody>
 </table>
 {% endblock content %}

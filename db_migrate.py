@@ -1,17 +1,17 @@
 #!venv/bin/python
-import imp
-from migrate.versioning import api
-from streams import db
-from config import BaseConfiguration
+from flask import Flask
+from flask.ext.sqlalchemy import SQLAlchemy
+from flask.ext.script import Manager
+from flask.ext.migrate import Migrate, MigrateCommand
 
-migration = BaseConfiguration.SQLALCHEMY_MIGRATE_REPO + \
-  '/versions/%03d_migration.py' % \
-  (api.db_version(BaseConfiguration.SQLALCHEMY_DATABASE_URI, BaseConfiguration.SQLALCHEMY_MIGRATE_REPO) + 1)
-tmp_module = imp.new_module('old_model')
-old_model = api.create_model(BaseConfiguration.SQLALCHEMY_DATABASE_URI, BaseConfiguration.SQLALCHEMY_MIGRATE_REPO)
-exec old_model in tmp_module.__dict__
-script = api.make_update_script_for_model(BaseConfiguration.SQLALCHEMY_DATABASE_URI, BaseConfiguration.SQLALCHEMY_MIGRATE_REPO, tmp_module.meta, db.metadata)
-open(migration, "wt").write(script)
-api.upgrade(BaseConfiguration.SQLALCHEMY_DATABASE_URI, BaseConfiguration.SQLALCHEMY_MIGRATE_REPO)
-print 'New migration saved as ' + migration
-print 'Current database version: ' + str(api.db_version(BaseConfiguration.SQLALCHEMY_DATABASE_URI, BaseConfiguration.SQLALCHEMY_MIGRATE_REPO))
+app = Flask(__name__)
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///app.db'
+
+db = SQLAlchemy(app)
+migrate = Migrate(app, db)
+
+manager = Manager(app)
+manager.add_command('db', MigrateCommand)
+
+if __name__ == '__main__':
+  manager.run()

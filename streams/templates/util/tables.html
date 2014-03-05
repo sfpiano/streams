@@ -29,9 +29,9 @@
 {% endmacro %}
 
 {% macro process_rows(data) -%}
-  <tr>
   {%- for row in data %}
+    <tr>
     {{ caller(row) }}
+    </tr>
   {%- endfor %}
-  </tr>
 {%- endmacro %}
