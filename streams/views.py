@@ -88,8 +88,7 @@ def releases():
     flash("Added Release")
     return redirect(url_for(".releases"))
 
-  data = Release.query
-  results = query_to_list(data)
+  results = Release.query.order_by(Release.date).all()
   return render_template('releases.html', releases=results, form=form)
 
 @app.route('/reqs', methods = ['GET', 'POST'])

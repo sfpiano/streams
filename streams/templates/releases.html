@@ -14,7 +14,18 @@
 </form>
 
 <table>
-{{ tables.render(releases) }}
+<thead>
+  <tr>
+    <th>Name</th>
+    <th>Date</th>
+  </tr>
+</thead>
+<tbody>
+{% call(release) tables.process_rows(releases) %}
+<td>{{ release.name }}</td>
+<td>{{ release.date }}</td>
+{% endcall %}
+</tbody>
 </table>
 {% endblock content %}
 

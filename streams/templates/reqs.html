@@ -19,6 +19,13 @@
 </form>
 
 <table>
+<thead>
+  <tr>
+    <th>Category</th>
+    <th>Ext ID</th>
+    <th>Description</th>
+  </tr>
+</thead>
 <tbody>
 {% call(req) tables.process_rows(reqs) %}
 <td>{{ req.category.name }}</td>
