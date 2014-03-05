@@ -1,4 +1,5 @@
 from os.path import abspath, dirname, join
+from os import environ
 
 _cwd = dirname(abspath(__file__))
 
@@ -6,7 +7,12 @@ class BaseConfiguration(object):
   DEBUG = False
   TESTING = False
   SECRET_KEY = 'iamsecret'
-  SQLALCHEMY_DATABASE_URI = 'sqlite:///' + join(_cwd, 'app.db')
+
+  if environ.get('DATABASE_URL') is None:
+    SQLALCHEMY_DATABASE_URI = 'sqlite:///' + join(_cwd, 'app.db')
+  else:
+    SQLALCHEMY_DATABASE_URI = os.environ['DATABASE_URL']
+
   SQLALCHEMY_MIGRATE_REPO = join(_cwd, 'db_repository')
   SQLALCHEMY_ECHO = False
   HASH_ROUNDS = 100000
