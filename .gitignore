@@ -8,3 +8,4 @@ venv/
 streams/db_repository/
 flask-testing/
 migrations/
+scripts/seed.py
