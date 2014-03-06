@@ -5,7 +5,7 @@
 {% block content %}
 {{super()}}
 
-<form action="{{url_for('issues')}}" method="POST">
+<form action="{{ form_action }}" method="{{ method | d("POST") }}">
 <fieldset>
   <legend>Add An Issue</legend>
   <dl>
@@ -14,18 +14,22 @@
   {{ forms.render_field(form.type) }}
   {{ forms.render_field(form.release) }}
   {{ forms.render_field(form.req) }}
+  {{ forms.render_field(form.assignee) }}
+  {{ forms.render_field(form.status) }}
   </dl>
   {{ form.hidden_tag() }}
   <p><input type="Submit" value="Add Issue"></p>
 </fieldset>
 </form>
 
-<table>
+<table id="table-base">
 <thead>
   <tr>
     <th>ID</th>
     <th>Release</th>
     <th>Type</th>
+    <th>Status</th>
+    <th>Assignee</th>
     <th>Title</th>
     <th>Description</th>
   </tr>
@@ -35,8 +39,13 @@
 <td>{{ issue.id }}</td>
 <td>{{ issue.release.name }}</td>
 <td>{{ issue.type }}</td>
+<td>{{ issue.status }}</td>
+<td>{{ issue.assignee.name }}</td>
 <td>{{ issue.title }}</td>
 <td>{{ issue.description }}</td>
+<td>{{ issue.requirements }}</td>
+<td><a href='{{ url_for('edit_issue', issue_id=issue.id) }}'>Edit</a></td>
+<td><a href='{{ url_for('del_issue', issue_id=issue.id) }}'>Delete</a></td>
 {% endcall %}
 </tbody>
 </table>

@@ -2,6 +2,7 @@
 <html>
 <head>
 <title>{% block title %}{{ title }}{% endblock %}</title>
+<link rel=stylesheet type=text/css href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
 <header>
@@ -15,17 +16,17 @@
 
 <nav>
 <ul>
-<li><a href="/">Home</a></li>
-<li><a href="/projects">Projects</a></li>
-<li><a href="/releases">Releases</a></li>
-<li><a href="/reqs">Requirements</a></li>
-<li><a href="/issues">Issues</a></li>
-<li><a href="/tests">Tests</a></li>
+<li><a href="{{ url_for('.index') }}">Home</a></li>
+<li><a href="{{ url_for('.projects') }}">Projects</a></li>
+<li><a href="{{ url_for('.releases') }}">Releases</a></li>
+<li><a href="{{ url_for('.reqs') }}">Requirements</a></li>
+<li><a href="{{ url_for('.issues') }}">Issues</a></li>
+<li><a href="{{ url_for('.tests') }}">Tests</a></li>
 <li>
   {% if current_user.is_anonymous() %}
-  <a href="{{url_for('register')}}">Register</a> / <a href="{{url_for('login')}}">Log In</a>
+  <a href="{{url_for('.register')}}">Register</a> / <a href="{{url_for('.login')}}">Log In</a>
   {% else %}
-  <a href="{{url_for('logout')}}">Logout</a>
+  <a href="{{url_for('.logout')}}">Logout</a>
   {% endif %}
 </li>
 </ul>
@@ -42,8 +43,8 @@
 <section>
 {% block content %}{% endblock %}
 </section>
-<footer>
-<p>Footer</p>
-</footer>
+<div class="footer">
+  <p>&nbsp;</p>
+</div>
 </body>
 </html>

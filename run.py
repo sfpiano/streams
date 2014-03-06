@@ -1,7 +1,6 @@
 #!venv/bin/python
 
-from streams import app, db
+from streams import app
 
 if __name__ == "__main__":
-  db.create_all()
   app.run(debug=True)

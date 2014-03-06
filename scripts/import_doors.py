@@ -9,7 +9,7 @@ from streams.models import RQCategory, Requirement
 
 def import_data(file):
   with open(file) as f:
-    for line in csv.reader(f, delimiter=',', quotechar='|'):
+    for line in csv.reader(f, delimiter=',', quotechar='"'):
       Requirement.create(
         description=line[2].rstrip(),
         project_id=sys.argv[2],

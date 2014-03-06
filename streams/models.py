@@ -106,17 +106,23 @@ class Issue(CRUDMixin, db.Model):
   __tablename__ = 'streams_issue'
 
   Types = create_named_tuple('bug', 'en')
+  Status = create_named_tuple('open', 'closed', 'invalid')
 
   release_id = db.Column(db.Integer, db.ForeignKey('streams_release.id'))
+  requirement_id = db.Column(db.Integer, db.ForeignKey('streams_rq.id'))
+  assignee_id = db.Column(db.Integer, db.ForeignKey('streams_user.id'))
 
   title = db.Column(db.Text)
   description = db.Column(db.Text)
   type = db.Column(db.Enum(*Types._asdict().values(), name='issue_type'))
+  status = db.Column(db.Enum(*Status._asdict().values(), name='issue_status'))
 
-  requirements = db.relationship(
-      'Requirement',
-      secondary=rq_issue_helper,
-      backref=db.backref('issues_query', lazy='dynamic'))
+  @property
+  def assignee(self):
+    try:
+      return User.query.get(self.assignee_id)
+    except Exception:
+      pass
 
   @property
   def release(self):
@@ -126,7 +132,7 @@ class Issue(CRUDMixin, db.Model):
       pass
 
   def __repr__(self):
-    return '<Issue {0} {1}>'.format(self.id, self.title)
+    return '<{0} {1}>'.format(self.id, self.title)
 
 class Test(CRUDMixin, db.Model):
   __tablename__ = 'streams_test'
@@ -135,13 +141,15 @@ class Test(CRUDMixin, db.Model):
   issue_id = db.Column(db.Integer, db.ForeignKey('streams_issue.id'))
 
   def __repr__(self):
-    return '<Test {0} {1}>'.format(self.id, self.description[0:25])
+    return '<{0} {1}>'.format(self.id, self.description[0:25])
 
 class Release(CRUDMixin, db.Model):
   __tablename__ = 'streams_release'
+
+  issues = db.relationship('Issue', backref='release')
 
   name = db.Column(db.Text)
   date = db.Column(db.Date)
 
   def __repr__(self):
-    return '<Release {0} {1}>'.format(self.id, self.name)
+    return '<{0} {1}>'.format(self.id, self.name)

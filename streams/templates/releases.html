@@ -13,7 +13,7 @@
 </fieldset>
 </form>
 
-<table>
+<table id="table-base">
 <thead>
   <tr>
     <th>Name</th>
@@ -22,8 +22,11 @@
 </thead>
 <tbody>
 {% call(release) tables.process_rows(releases) %}
-<td>{{ release.name }}</td>
-<td>{{ release.date }}</td>
+  <td>{{ release.name }}</td>
+  <td>{{ release.date }}</td>
+  {% call(issue) tables.process_rows(release.issues) %}
+    <td>***{{ issue.title }}</td>
+  {% endcall %}
 {% endcall %}
 </tbody>
 </table>

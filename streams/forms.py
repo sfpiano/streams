@@ -48,6 +48,8 @@ def issue_query():
   return Issue.query
 def rq_cat_query():
   return RQCategory.query
+def assignee_query():
+  return User.query
 
 class RequirementForm(Form):
   description = fields.TextAreaField(validators=[Required()])
@@ -61,6 +63,11 @@ class IssueForm(Form):
     'Type',
     choices=Issue.Types._asdict().items(),
     validators=[Required()])
+  status = fields.SelectField(
+    'Status',
+    choices=Issue.Status._asdict().items(),
+    validators=[Required()])
+  assignee = QuerySelectField(query_factory=assignee_query)
   release = QuerySelectField(query_factory=release_query)
   req = QuerySelectField(query_factory=req_query)
 

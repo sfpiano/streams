@@ -5,7 +5,7 @@
 {% block content %}
 {{super()}}
 
-<form action="{{url_for('reqs')}}" method="POST">
+<form action="{{ form_action }}" method="{{ method | d("POST") }}">
 <fieldset>
 <legend>Add A Requirement</legend>
   <dl>
@@ -18,7 +18,7 @@
 </fieldset>
 </form>
 
-<table>
+<table id="table-base">
 <thead>
   <tr>
     <th>Category</th>
@@ -31,6 +31,9 @@
 <td>{{ req.category.name }}</td>
 <td>{{ req.external_id }}</td>
 <td>{{ req.description }}</td>
+<td><a href='{{ url_for('edit_req', req_id=req.id) }}'>Edit</a></td>
+<td><a href='{{ url_for('del_req', req_id=req.id) }}'>Delete</a></td>
+<td><a href='{{ url_for('issue_from_req', req_id=req.id) }}'>Add Issue</a></td>
 {% endcall %}
 </tbody>
 </table>
