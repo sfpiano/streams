@@ -131,6 +131,13 @@ class Issue(CRUDMixin, db.Model):
     except Exception:
       pass
 
+  @property
+  def req(self):
+    try:
+      return Requirement.query.get(self.requirement_id)
+    except Exception:
+      pass
+
   def __repr__(self):
     return '<{0} {1}>'.format(self.id, self.title)
 
