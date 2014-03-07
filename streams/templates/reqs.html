@@ -5,6 +5,7 @@
 {% block content %}
 {{super()}}
 
+<div id="b">
 <form action="{{ form_action }}" method="{{ method | d("POST") }}">
 <fieldset>
 <legend>Add A Requirement</legend>
@@ -17,6 +18,17 @@
 <p><input type="Submit" value="Add Requirement"></p>
 </fieldset>
 </form>
+</div>
+
+<script>
+  $("#b").css("display","none");
+
+  function showForm() {
+    $("#b").css("display","block");
+  }
+</script>
+
+<a href="javascript:showForm();">New req</a>
 
 <table id="table-base">
 <thead>
@@ -24,6 +36,9 @@
     <th>Category</th>
     <th>Ext ID</th>
     <th>Description</th>
+    <th/>
+    <th/>
+    <th/>
   </tr>
 </thead>
 <tbody>

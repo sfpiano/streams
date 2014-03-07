@@ -2,7 +2,29 @@
 <html>
 <head>
 <title>{% block title %}{{ title }}{% endblock %}</title>
+<link rel="stylesheet" href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
 <link rel=stylesheet type=text/css href="{{ url_for('static', filename='style.css') }}">
+<script src="//code.jquery.com/jquery-1.9.1.js"></script>
+<script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+<style>
+/* IE has layout issues when sorting (see #5413) */
+.group { zoom: 1 }
+</style>
+<script>
+$(function() {
+  $( "#accordion" )
+    .accordion({
+      header: "> div > h3"
+    })
+    .sortable({
+      axis: "y",
+      handle: "h3",
+      stop: function( event, ui ) {
+        ui.item.children( "h3" ).triggerHandler( "focusout" );
+      }
+    });
+});
+</script>
 </head>
 <body>
 <header>

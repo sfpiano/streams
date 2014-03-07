@@ -13,23 +13,53 @@
 </fieldset>
 </form>
 
-<table id="table-base">
-<thead>
-  <tr>
-    <th>Name</th>
-    <th>Date</th>
-  </tr>
-</thead>
-<tbody>
-{% call(release) tables.process_rows(releases) %}
-  <td>{{ release.name }}</td>
-  <td>{{ release.date }}</td>
-  {% call(issue) tables.process_rows(release.issues) %}
-    <td>***{{ issue.title }}</td>
-  {% endcall %}
-{% endcall %}
-</tbody>
-</table>
+<!--<div id="pro_cont">
+  <h3 class="alignleft">aasdf</h3>
+  <div class="alignright">
+  <table height="6" width="200">
+  <tbody>
+    <tr height="6">
+      <td>Progress</td>
+      <td width="98" bgcolor="#009900"/>
+      <td width="2" bgcolor="#cc0000"/>
+    </tr>
+    <tr>
+      <td colspan="6">92 of 93 issues resolved</td>
+    </tr>
+  </tbody>
+  </table>
+  </div>
+</div>
+<div style="clear: both;"/>-->
+
+<div id="accordion">
+{% for release in releases %}
+  <div class="group">
+    <h3>{{ release.name }} {{ release.date }}</h3>
+    <div>
+      <table id="table-base">
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>Status</th>
+          <th>Title</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+      {% call(issue) tables.process_rows(release.issues) %}
+        <td>{{ issue.type }}</td>
+        <td>{{ issue.status }}</td>
+        <td>{{ issue.title }}</td>
+        <td>{{ issue.description }}</td>
+      {% endcall %}
+      </tbody>
+      </table>
+    </div>
+  </div>
+{% endfor %}
+</div>
+
 {% endblock content %}
 
 

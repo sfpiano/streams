@@ -19,17 +19,20 @@ h2              { font-size: 1.2em; }
 .footer         { height: 4em; }
 .footer p       { color: #fff; background: #4f98db; }
 
-.table-base
+.alignleft      { float: left; }
+.alignright     { float: right; }
+
+#table-base
 {
   font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
   font-size: 12px;
   background: #fff;
-  margin: 45px;
+  margin: 20;
   width: 90%;
   border-collapse: collapse;
   text-align: left;
 }
-.table-base th
+#table-base th
 {
   font-size: 14px;
   font-weight: normal;
@@ -37,13 +40,42 @@ h2              { font-size: 1.2em; }
   padding: 10px 8px;
   border-bottom: 2px solid #6678b1;
 }
-.table-base td
+#table-base td
 {
   border-bottom: 1px solid #ccc;
   color: #669;
   padding: 6px 8px;
 }
-.table-base tbody tr:hover td
+#table-base tbody tr:hover td
 {
   color: #009;
+}
+
+.ui-accordion .ui-accordion-header {
+  display: block;
+  cursor: pointer;
+  position: relative;
+  margin-top: 2px;
+  padding: .5em .5em .5em .7em;
+  min-height: 0; /* support: IE7 */
+}
+.ui-accordion .ui-accordion-icons {
+  padding-left: 2.2em;
+}
+.ui-accordion .ui-accordion-noicons {
+  padding-left: .7em;
+}
+.ui-accordion .ui-accordion-icons .ui-accordion-icons {
+  padding-left: 2.2em;
+}
+.ui-accordion .ui-accordion-header .ui-accordion-header-icon {
+  position: absolute;
+  left: .5em;
+  top: 50%;
+  margin-top: -8px;
+}
+.ui-accordion .ui-accordion-content {
+  padding: 1em 2.2em;
+  border-top: 0;
+  overflow: auto;
 }
