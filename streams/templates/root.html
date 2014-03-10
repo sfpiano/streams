@@ -1,0 +1,16 @@
+<!doctype html>
+<html lang="en">
+<head>
+<title>{% block title %}{{ title }}{% endblock %}</title>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min.js"></script>
+
+<link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/themes/smoothness/jquery-ui.css" />
+<link rel=stylesheet type=text/css href="{{ url_for('static', filename='style.css') }}"/>
+
+{% block head_custom %}{% endblock %}
+</head>
+
+<html>
+{% block body %}{% endblock %}
+</html>

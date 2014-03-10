@@ -5,6 +5,27 @@
 {% block content %}
 {{super()}}
 
+<script type=text/javascript>
+$(document).ready(function() {
+  var $dialog = $('<div></div>')
+    .html('This dialog will show every time!')
+    .dialog({
+      autoOpen: false,
+      width: 1000,
+      height: 800,
+      title: 'Issues'
+    });
+
+  $('a#get_issues').click(function() {
+    $.get($SCRIPT_ROOT + '/_issues_from_req', {
+      req_id: $(this).attr('value')
+    }, function(data) {
+      $dialog.html(data).dialog("open");
+    });
+  });
+});
+</script>
+
 <div id="b">
 <form action="{{ form_action }}" method="{{ method | d("POST") }}">
 <fieldset>
@@ -34,8 +55,8 @@
 <thead>
   <tr>
     <th>Category</th>
-    <th>Ext ID</th>
     <th>Description</th>
+    <th/>
     <th/>
     <th/>
     <th/>
@@ -49,6 +70,7 @@
 <td><a href='{{ url_for('edit_req', req_id=req.id) }}'>Edit</a></td>
 <td><a href='{{ url_for('del_req', req_id=req.id) }}'>Delete</a></td>
 <td><a href='{{ url_for('issue_from_req', req_id=req.id) }}'>Add Issue</a></td>
+<td><a href=# id=get_issues value={{ req.id }}>Issues</a></td>
 {% endcall %}
 </tbody>
 </table>

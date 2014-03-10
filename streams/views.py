@@ -136,6 +136,14 @@ def issue_from_req(req_id):
 
 ##------------------------------------------------------------------------------
 ##------------------------------------------------------------------------------
+@app.route('/_issues_from_req')
+def issues_from_req():
+  req_id = request.args.get('req_id', 0, type=int)
+  results = Issue.query.filter(Issue.requirement_id == req_id).all()
+  return render_template('issues_from_req_popup.html', issues=results)
+
+##------------------------------------------------------------------------------
+##------------------------------------------------------------------------------
 @app.route('/issues/d/<int:issue_id>', methods = ['GET', 'POST'])
 @login_required
 def del_issue(issue_id):

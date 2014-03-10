@@ -1,0 +1,34 @@
+{% extends "root.html" %}
+{% import "util/tables.html" as tables %}
+{% block body %}
+{{super()}}
+
+<table id="table-base">
+<thead>
+  <tr>
+    <th>ID</th>
+    <th>Release</th>
+    <th>Type</th>
+    <th>Status</th>
+    <th>Assignee</th>
+    <th>RQ</th>
+    <th>Title</th>
+    <th>Description</th>
+  </tr>
+</thead>
+<tbody>
+{% call(issue) tables.process_rows(issues) %}
+<td>{{ issue.id }}</td>
+<td>{{ issue.release.name }}</td>
+<td>{{ issue.type }}</td>
+<td>{{ issue.status }}</td>
+<td>{{ issue.assignee.name }}</td>
+<td>{{ issue.req }}</td>
+<td>{{ issue.title }}</td>
+<td>{{ issue.description }}</td>
+{% endcall %}
+</tbody>
+</table>
+{% endblock body %}
+
+

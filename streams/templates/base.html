@@ -1,16 +1,14 @@
-<!DOCTYPE html>
-<html>
-<head>
-<title>{% block title %}{{ title }}{% endblock %}</title>
-<link rel="stylesheet" href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
-<link rel=stylesheet type=text/css href="{{ url_for('static', filename='style.css') }}">
-<script src="//code.jquery.com/jquery-1.9.1.js"></script>
-<script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+{% extends "root.html" %}
+{{super()}}
+
+{% block head_custom %}
 <style>
 /* IE has layout issues when sorting (see #5413) */
 .group { zoom: 1 }
 </style>
+
 <script>
+var $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
 $(function() {
   $( "#accordion" )
     .accordion({
@@ -25,7 +23,9 @@ $(function() {
     });
 });
 </script>
-</head>
+{% endblock head_custom %}
+
+{% block body %}
 <body>
 <header>
 <h1>{{ self.title() }}</h1>
@@ -36,6 +36,7 @@ $(function() {
   {% endif %}
 </p>
 
+{% block nav %}
 <nav>
 <ul>
 <li><a href="{{ url_for('.index') }}">Home</a></li>
@@ -53,6 +54,7 @@ $(function() {
 </li>
 </ul>
 </nav>
+{% endblock nav %}
 </header>
 {% set messages = get_flashed_messages() %}
 {% if messages %}
@@ -68,5 +70,4 @@ $(function() {
 <div class="footer">
   <p>&nbsp;</p>
 </div>
-</body>
-</html>
+{% endblock body %}
