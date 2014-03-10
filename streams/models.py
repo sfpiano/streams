@@ -12,6 +12,8 @@ from collections import namedtuple
 def create_named_tuple(*values):
   return namedtuple('NamedTuple', values)(*values)
 
+################################################################################
+################################################################################
 class User(UserMixin, CRUDMixin, db.Model):
   __tablename__ = 'streams_user'
   name = db.Column(db.String(64), unique = True)
@@ -51,6 +53,8 @@ class User(UserMixin, CRUDMixin, db.Model):
   def __repr__(self):
     return '<User {0}>'.format(self.name)
 
+################################################################################
+################################################################################
 class Project(CRUDMixin, db.Model):
   __tablename__ = 'streams_project'
   name = db.Column(db.String(80))
@@ -64,6 +68,8 @@ rq_issue_helper = db.Table('rq_issue_helper',
     db.Column('issue_id', db.Integer, db.ForeignKey('streams_issue.id'))
     )
 
+################################################################################
+################################################################################
 class RQCategory(CRUDMixin, db.Model):
   __tablename__ = 'streams_rq_cat'
 
@@ -72,6 +78,8 @@ class RQCategory(CRUDMixin, db.Model):
   def __repr__(self):
     return '<Cat {0} {1}>'.format(self.id, self.name)
 
+################################################################################
+################################################################################
 class Requirement(CRUDMixin, db.Model):
   __tablename__ = 'streams_rq'
 
@@ -102,6 +110,8 @@ class Requirement(CRUDMixin, db.Model):
     except Exception:
       return '<RQ {0} {1}>'.format(self.id, self.description)
 
+################################################################################
+################################################################################
 class Issue(CRUDMixin, db.Model):
   __tablename__ = 'streams_issue'
 
@@ -141,6 +151,8 @@ class Issue(CRUDMixin, db.Model):
   def __repr__(self):
     return '<{0} {1}>'.format(self.id, self.title)
 
+################################################################################
+################################################################################
 class Test(CRUDMixin, db.Model):
   __tablename__ = 'streams_test'
 
@@ -150,6 +162,8 @@ class Test(CRUDMixin, db.Model):
   def __repr__(self):
     return '<{0} {1}>'.format(self.id, self.description[0:25])
 
+################################################################################
+################################################################################
 class Release(CRUDMixin, db.Model):
   __tablename__ = 'streams_release'
 

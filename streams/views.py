@@ -94,7 +94,12 @@ def issues():
     flash("Added Issue")
     return redirect(url_for(".issues"))
 
-  results = Issue.query.all()
+  results = Issue.query.\
+                  join(Requirement).\
+                  filter(Requirement.project_id
+                    == current_user.current_project_id).\
+                  order_by(Issue.release_id).\
+                  all()
   return render_template('issues.html', action='Add', issues=results, form=form)
 
 ##------------------------------------------------------------------------------
@@ -103,14 +108,14 @@ def issues():
 @login_required
 def issue_from_req(req_id):
   from wtforms.ext.sqlalchemy.fields import QuerySelectField
-  from forms import req_query
+  from forms import proj_req_query
 
   class F(IssueForm):
     pass
 
   setattr(F, 'req',
     QuerySelectField(
-      query_factory=req_query,
+      query_factory=proj_req_query,
       default=Requirement.query.get(req_id)))
 
   form = F()
@@ -196,7 +201,8 @@ def reqs():
     flash("Added Requirement")
     return redirect(url_for(".reqs"))
     
-  results = Requirement.query.all()
+  results = Requirement.query.filter(
+    Requirement.project_id == current_user.current_project_id).all()
   return render_template('reqs.html', reqs=results, form=form)
 
 ##------------------------------------------------------------------------------
