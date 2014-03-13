@@ -61,7 +61,7 @@ class Project(CRUDMixin, db.Model):
   requirements = db.relationship('Requirement', backref='project', lazy='dynamic')
 
   def __repr__(self):
-    return '<Project {0} {1}>'.format(self.id, self.name)
+    return self.name
 
 rq_issue_helper = db.Table('rq_issue_helper',
     db.Column('rq_id', db.Integer, db.ForeignKey('streams_rq.id')),

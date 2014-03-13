@@ -102,6 +102,21 @@ def issues():
                   all()
   return render_template('issues.html', action='Add', issues=results, form=form)
 
+@app.route('/issues_overview')
+@login_required
+def issues_overview():
+  assignees = User.query.order_by(User.name).all()
+  return render_template('issues_overview.html', assignees=assignees)
+
+##------------------------------------------------------------------------------
+##------------------------------------------------------------------------------
+@app.route('/_issues_query')
+def issues_query():
+  assignee = request.args.get('assgn', '')
+  assignee_id = User.query.filter(User.name == assignee).one().id
+  results = Issue.query.filter(Issue.assignee_id == assignee_id).all()
+  return render_template('issues.html', issues=results, form=IssueForm())
+
 ##------------------------------------------------------------------------------
 ##------------------------------------------------------------------------------
 @app.route('/issues/r/<int:req_id>', methods = ['GET', 'POST'])

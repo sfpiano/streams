@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% import "util/tables.html" as tables %}
+{% import "util/forms.html" as forms %}
+{% block title %}Issues{% endblock %}
+{% block content %}
+{{super()}}
+<div class="section">
+  <a href="{{ url_for('.issues') }}">All issues</a>
+</div>
+<div class="section">
+  <div>
+    <b>Open By Assignee</b>
+  </div>
+  <div>
+    <table id="table-base">
+    {% for assgn in assignees %}
+      <tr><td><a href="{{ url_for('.issues_query', assgn=assgn.name) }}">{{ assgn.name }}</a></td></tr>
+    {% endfor %}
+    </table>
+  </div>
+</div>
+{% endblock content %}

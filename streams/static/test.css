@@ -1,0 +1,68 @@
+@import url(http://fonts.googleapis.com/css?family=Lato:400,700);
+* { padding: 0; margin: 0; }
+body { font-family: 'Lato', sans-serif; letter-spacing: 1px;}
+
+header {
+  text-align: justify;
+  height: 2em;
+  padding: 1em 0 1em 0;
+  background: #2c3e50;
+  color: #fff;
+}
+
+header::after {
+  content: '';
+  display: inline-block;
+  width: 100%;
+}
+
+header > div,
+header > div::before,
+header nav,
+header > div h1 {
+  display: inline-block;
+  vertical-align: middle;
+  text-align: left;
+}
+
+header > div {
+  height: 100%;
+}
+
+header > div::before {
+  content: '';
+  height: 100%;
+}
+
+header nav a {
+  padding: 0 0.6em;
+  white-space: nowrap;
+}
+
+header nav a:last-child {
+  padding-right: 0;
+}
+
+.row {
+  width: 100%;
+  margin: 0 auto;
+  overflow: hidden;
+}
+.navigation {
+  color: #fff; background: #4f98db;
+}
+
+@media screen and (max-width: 720px){
+  header {
+    height: auto;
+}
+
+header > div,
+header > div h1,
+header nav {
+  height: auto;
+  width: auto;
+  display: block;
+  text-align: center;
+}
+}

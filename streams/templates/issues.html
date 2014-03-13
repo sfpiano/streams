@@ -5,7 +5,7 @@
 {% block content %}
 {{super()}}
 
-<form action="{{ form_action }}" method="{{ method | d("POST") }}">
+<form action="{{ form_action }}" method="{{ method | d("POST") }}" class="elegant-aero">
 <fieldset>
   <legend>Add An Issue</legend>
   <dl>
@@ -22,6 +22,7 @@
 </fieldset>
 </form>
 
+<div class="section">
 <table id="table-base">
 <thead>
   <tr>
@@ -53,5 +54,6 @@
 {% endcall %}
 </tbody>
 </table>
+</div>
 {% endblock content %}
 

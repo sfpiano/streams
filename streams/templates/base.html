@@ -28,34 +28,33 @@ $(function() {
 {% block body %}
 <body>
 <header>
-<h1>{{ self.title() }}</h1>
-
-<p>
+<div><h1>Streams</h1></div>
+<nav>
+  <a href="{{ url_for('.index') }}">Home</a>
+  <a href="{{ url_for('.projects') }}">Projects</a>
+  {% if current_user.is_anonymous() %}
+    <a href="{{url_for('.register')}}">Register</a> / <a href="{{url_for('.login')}}">Log In</a>
+  {% else %}
+    <a href="{{url_for('.logout')}}">Logout</a>
+  {% endif %}
+</nav>
+</header>
+<div class="row navigation">
   {% if current_user.is_authenticated() %}
   {{ current_user.name }} / <b>{{ current_user.current_project }}</b>
   {% endif %}
-</p>
+</div>
 
 {% block nav %}
-<nav>
+<nav id="nav">
 <ul>
-<li><a href="{{ url_for('.index') }}">Home</a></li>
-<li><a href="{{ url_for('.projects') }}">Projects</a></li>
 <li><a href="{{ url_for('.releases') }}">Releases</a></li>
 <li><a href="{{ url_for('.reqs') }}">Requirements</a></li>
-<li><a href="{{ url_for('.issues') }}">Issues</a></li>
+<li><a href="{{ url_for('.issues_overview') }}">Issues</a></li>
 <li><a href="{{ url_for('.tests') }}">Tests</a></li>
-<li>
-  {% if current_user.is_anonymous() %}
-  <a href="{{url_for('.register')}}">Register</a> / <a href="{{url_for('.login')}}">Log In</a>
-  {% else %}
-  <a href="{{url_for('.logout')}}">Logout</a>
-  {% endif %}
-</li>
 </ul>
 </nav>
 {% endblock nav %}
-</header>
 {% set messages = get_flashed_messages() %}
 {% if messages %}
 <section>

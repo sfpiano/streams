@@ -27,7 +27,7 @@ $(document).ready(function() {
 </script>
 
 <div id="b">
-<form action="{{ form_action }}" method="{{ method | d("POST") }}">
+<form action="{{ form_action }}" method="{{ method | d("POST") }}" class="elegant-aero">
 <fieldset>
 <legend>Add A Requirement</legend>
   <dl>
@@ -49,12 +49,14 @@ $(document).ready(function() {
   }
 </script>
 
+<div class="section">
 <a href="javascript:showForm();">New req</a>
 
 <table id="table-base">
 <thead>
   <tr>
     <th>Category</th>
+    <th>Ext ID</th>
     <th>Description</th>
     <th/>
     <th/>
@@ -74,4 +76,5 @@ $(document).ready(function() {
 {% endcall %}
 </tbody>
 </table>
+</div>
 {% endblock content %}
