@@ -102,11 +102,10 @@ class Requirement(CRUDMixin, db.Model):
 
   def __repr__(self):
     try:
-      return '{0} {1} {2}{3}'.format(
+      return '{0} {1} {2}'.format(
           self.category.name,
           self.external_id,
-          self.description[:50],
-          '...' if len(self.description) > 50 else "")
+          self.description)
     except Exception:
       return '<RQ {0} {1}>'.format(self.id, self.description)
 
