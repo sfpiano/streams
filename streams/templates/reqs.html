@@ -47,6 +47,10 @@ $(document).ready(function() {
   function showForm() {
     $("#b").css("display","block");
   }
+
+  {% if action == "Edit" %}
+  showForm();
+  {% endif %}
 </script>
 
 <div class="section">
